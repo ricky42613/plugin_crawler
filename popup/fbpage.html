@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>for_FB</title>
+    <script src="../jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <style type="text/css">
+        body {
+            min-width: 650px;
+            /* your desired width */
+            max-width: 100%;
+            min-height: 100px;
+            max-height: 100%;
+            position: relative;
+        }
+        
+        #todo {
+            width: 450px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="navbar-brand">
+            <strong>Facebook</strong>
+        </div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" id="g_and_y" href="#">Google&Youtube</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="wq" href="#">Working Queue</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <button class="btn btn-light" id="setting" style="margin-right: 20px;">Setting</button>
+                <button class="btn btn-light" id="logout">Logout</button>
+            </form>
+        </div>
+    </nav>
+    <div class="form-group" id="page">
+        <form class="form-inline" style="margin-left:30px;">
+            <label>Page Link :</label>
+            <input style="margin-left:5px;margin-right:5px;" id="page_link" type="text">
+            <label>Link Count :</label>
+            <input style="margin-left:5px;margin-right:5px;" id="page_top_k" type="number" name="quantity" min="1" max="1000">
+            <button id="page_send" type="button" class="btn btn btn-primary">Send</button>
+        </form>
+    </div>
+    <div class="form-group" id="link">
+        <div class="custom-file" style="width:485px;margin-left:30px;margin-top:5px">
+            <input id="list_file" type="file" accept=".txt, .doc, .docx" class="custom-file-input">
+            <label class="custom-file-label" id="filename" for="customFile">Choose file</label>
+        </div>
+        <form class="form-inline">
+            <input type="text" class="form-control" placeholder="article link" name="task" style="width:450px;margin-left:30px;margin-top:5px;margin-right:5px">
+            <button id="add" type="button" class="btn btn btn-primary" style="margin-right:5px">Add</button>
+        </form>
+        <div style="margin:30px;height:200px;overflow-x:hidden;overflow-y:auto;border:2px #ccc solid;border-radius:10px;background-color:#eee;">
+            <ul id="todo">
+            </ul>
+        </div>
+        <form class="form-inline" style="margin-left:30px;">
+            <label>Task Name :</label>
+            <input style="margin-left:5px;margin-right:5px;width: 120px;" id="task_name" type="text">
+            <label> DB : </label>
+            <select class="custom-select" id="dblist" style="width: 120px;">
+                <option value="test" selected="selected">test</option>
+                <option value="edu_link">edu_link</option>
+                <option value="key_link">key_link</option>
+                <option value="yt_104">yt_104</option>
+            </select>
+            <label>Top K :</label>
+            <input style="margin-left:5px;margin-right:5px;" id="top_k" type="number" name="quantity" min="1" max="1000">
+            <button id="send" type="button" class="btn btn btn-primary">Send</button>
+        </form>
+    </div>
+    <script src="fbpage.js"></script>
+</body>
+
+</html>

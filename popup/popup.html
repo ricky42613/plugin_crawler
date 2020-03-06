@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="../jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <style type="text/css">
+        body {
+            width: 550px;
+            /* your desired width */
+            max-width: 100%;
+            min-height: 100px;
+            max-height: 100%;
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="navbar-brand">
+            <strong>Google&Youtube</strong>
+        </div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" id="fblink" href="#">Facebook</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="wq" href="#">Working Queue</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <button class="btn btn-light" id="setting" style="margin-right: 20px;">Setting</button>
+                <button class="btn btn-light" id="logout">Logout</button>
+            </form>
+        </div>
+    </nav>
+    <div class="form-group google_key">
+        <div class="custom-file" style="width:200px;margin-left:30px;margin-top:5px">
+            <input id="list_file" type="file" accept=".txt, .doc, .docx" class="custom-file-input">
+            <label class="custom-file-label" id="filename" for="customFile">Choose file</label>
+        </div>
+        <form class="form-inline" style="margin-left:30px;margin-top:5px;">
+            <input type="text" class="form-control" placeholder="key term" name="key_word" style="width:200px;">
+        </form>
+        <form class="form-inline" style="margin-left:30px;margin-top:5px;">
+            <select class="custom-select" id="dblist" style="width: 200px;">
+                <option value="test" selected="selected">test</option>
+                <option value="edu_link">edu_link</option>
+                <option value="key_link">key_link</option>
+                <option value="yt_104">yt_104</option>
+            </select>
+        </form>
+        <div style="margin-top: 5px; margin-left:30px;">
+            <button id="google" type="button" class="btn btn btn-primary" style="margin-right:5px">Send Google</button>
+            <button id="youtube" type="button" class="btn btn btn-primary">Send Youtube</button>
+        </div>
+    </div>
+    <script src="popup.js"></script>
+</body>
+
+</html>
