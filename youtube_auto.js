@@ -53,10 +53,11 @@
     }
 
     function parse_arr(arr) {
-        arr = arr.map(item => {
+        arr = arr.map((item,idx) => {
             let data = {}
             data.title = $(item).find("#video-title")[0].innerText.trim()
             data.owner = $(item).find("#channel-name")[0].innerText.trim()
+            data.rank = idx+1
             data.track_time = date2str(new Date())
             data.source = "youtube"
             let search_obj = new URLSearchParams(window.location.search)
