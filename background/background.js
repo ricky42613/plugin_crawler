@@ -82,7 +82,7 @@ function google_parse(arr, idx, db) {
 function yt_parse(arr, idx, db) {
     setTimeout(function() {
         chrome.tabs.create({
-            url: "https://www.youtube.com/results?search_query=" + arr[idx] + "#" + db
+            url: "https://www.youtube.com/results?search_query=" + arr[idx].replace(/\s/g,"+") + "#" + db
         }, rsp => {
             chrome.tabs.executeScript(rsp.id, {
                 file: "jquery-3.3.1.min.js"
