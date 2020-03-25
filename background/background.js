@@ -41,7 +41,7 @@ function google_parse(arr, idx, db) {
         $.get('http://127.0.0.1:3000/addcnt',r=>{
             if(r.status){
                 chrome.tabs.create({
-                    url: "https://www.google.com/search?q=" + arr[idx] + "#" + db
+                    url: "https://www.google.com/search?q=" + arr[idx].replace(/\s/g,"+") + "#" + db
                 }, rsp => {
                     // chrome.tabs.sendMessage(rsp.id, {
                     //     type: 'dbname',
