@@ -6,7 +6,7 @@
 
 let author = ""
     // = localStorage.getItem("author") == null ? "" : localStorage.getItem("author")
-let dblist = ["edu_link", "key_link", "yt_104", "test","travel_link","yt_104_2"]
+let dblist = ["edu_link", "key_link", "yt_104", "test", "travel_link", "yt_104_2"]
 let db_site
     // = localStorage.getItem("site") == null ? "http://nubot70.taiwin.tw:5802" : localStorage.getItem("site")
 let daycnt
@@ -38,10 +38,10 @@ function send_to_edu(data, db) {
 function google_parse(arr, idx, db) {
     setTimeout(function() {
         console.log(arr[idx])
-        $.get('http://127.0.0.1:3000/addcnt',r=>{
-            if(r.status){
+        $.get('http://127.0.0.1:3000/addcnt', r => {
+            if (r.status) {
                 chrome.tabs.create({
-                    url: "https://www.google.com/search?q=" + arr[idx].replace(/\s/g,"+") + "#" + db
+                    url: "https://www.google.com/search?q=" + arr[idx].replace(/\s/g, "+") + "#" + db
                 }, rsp => {
                     // chrome.tabs.sendMessage(rsp.id, {
                     //     type: 'dbname',
@@ -72,17 +72,17 @@ function google_parse(arr, idx, db) {
                     }
                     // })
                 });
-            }else{
+            } else {
                 console.log(r.msg)
             }
         })
-    }, 3000)
+    }, 15000)
 }
 
 function yt_parse(arr, idx, db) {
     setTimeout(function() {
         chrome.tabs.create({
-            url: "https://www.youtube.com/results?search_query=" + arr[idx].replace(/\s/g,"+") + "#" + db
+            url: "https://www.youtube.com/results?search_query=" + arr[idx].replace(/\s/g, "+") + "#" + db
         }, rsp => {
             chrome.tabs.executeScript(rsp.id, {
                 file: "jquery-3.3.1.min.js"
@@ -209,12 +209,10 @@ chrome.runtime.onInstalled.addListener(function(details) {
 
 chrome.webRequest.onBeforeRequest.addListener(
     function(details) {
-        return {cancel: details.type == "image" && details.initiator == "chrome-extension://bhilfdpankmepagekoapnggoiokoeeai" };
-    },
-    {
+        return { cancel: details.type == "image" && details.initiator == "chrome-extension://bhilfdpankmepagekoapnggoiokoeeai" };
+    }, {
         urls: ["<all_urls>"]
-    },
-    ["blocking"]
+    }, ["blocking"]
 );
 
 

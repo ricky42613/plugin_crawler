@@ -88,9 +88,11 @@
         chrome.runtime.sendMessage({
             type: 'save_data',
             data: rst,
-            db:db
+            db: db
         }, (r) => {
-            window.close();
+            setTimeout(function() {
+                window.close();
+            }, 5000)
         })
     })
 })()
