@@ -255,6 +255,11 @@ chrome.runtime.onMessage.addListener(
                 // localStorage.setItem("daycnt",daycnt)
             timecnt = request.info.time_query
             sendResponse("ok")
+        } else if (request.type == "close_tab") {
+            sendResponse("got it")
+            setTimeout(function() {
+                chrome.tabs.remove(sender.tab.id)
+            }, 10000)
         }
         return true
     }

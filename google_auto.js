@@ -58,6 +58,10 @@
             return d2.getFullYear() + '' + month + '' + date + "000000"
         }
     }
+
+    function getRandomInt(max) {
+        return Math.floor(Math.random() * Math.floor(max));
+    }
     console.log('already insert')
     $(document).ready(function() {
         var db = window.location.hash.substring(1);
@@ -91,7 +95,14 @@
             db: db
         }, (r) => {
             setTimeout(function() {
-                window.close();
+                let random_num = getRandomInt(8)
+                $(".g .r > a")[random_num].click()
+                    // window.close();
+                chrome.runtime.sendMessage({
+                    type: 'close_tab',
+                }, (r) => {
+                    console.log(r)
+                })
             }, 5000)
         })
     })
