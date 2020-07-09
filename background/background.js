@@ -13,6 +13,7 @@ let daycnt
     // = localStorage.getItem("daycnt") == null ? 100 :parseInt(localStorage.getItem("daycnt"))
 let timecnt
     // = localStorage.getItem("timecnt") ==null ? 100 : parseInt(localStorage.getItem("timecnt"))
+let auto_tab = []
 
 function init_status(cb) {
     $.get('http://127.0.0.1:3000/get_info', r => {
@@ -35,48 +36,76 @@ function send_to_edu(data, db) {
     }
 }
 
+function getRandom(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
 function google_parse(arr, idx, db) {
+    let random_num = getRandom(10, 21)
     setTimeout(function() {
-        console.log(arr[idx])
         $.get('http://127.0.0.1:3000/addcnt', r => {
             if (r.status) {
                 chrome.tabs.create({
-                    url: "https://www.google.com/search?q=" + arr[idx].replace(/\s/g, "+") + "#" + db
+                    url: "https://www.google.com#" + arr[idx].replace(/\s/g, "+")
                 }, rsp => {
-                    // chrome.tabs.sendMessage(rsp.id, {
-                    //     type: 'dbname',
-                    //     db:db
-                    // }, function(response) {
                     chrome.tabs.executeScript(rsp.id, {
-                        file: "jquery-3.3.1.min.js"
+                        code: "localStorage.setItem('auto_db','" + db + "');"
                     }, function() {
                         if (chrome.runtime.lastError) {
                             var errorMsg = chrome.runtime.lastError.message;
                             console.log(errorMsg)
                         } else {
                             chrome.tabs.executeScript(rsp.id, {
-                                file: "google_auto.js"
+                                file: "jquery-3.3.1.min.js"
                             }, function() {
-                                console.log(idx)
-                                console.log(arr.length)
                                 if (chrome.runtime.lastError) {
                                     var errorMsg = chrome.runtime.lastError.message;
                                     console.log(errorMsg)
+                                } else {
+                                    chrome.tabs.executeScript(rsp.id, {
+                                        file: "home_page.js"
+                                    }, function() {
+                                        if (chrome.runtime.lastError) {
+                                            var errorMsg = chrome.runtime.lastError.message;
+                                            console.log(errorMsg)
+                                        } else {
+                                            setTimeout(function() {
+                                                chrome.tabs.executeScript(rsp.id, {
+                                                    file: "jquery-3.3.1.min.js"
+                                                }, function() {
+                                                    if (chrome.runtime.lastError) {
+                                                        var errorMsg = chrome.runtime.lastError.message;
+                                                        console.log(errorMsg)
+                                                    } else {
+                                                        chrome.tabs.executeScript(rsp.id, {
+                                                            file: "google_auto.js"
+                                                        }, function() {
+                                                            console.log(idx)
+                                                            console.log(arr.length)
+                                                            if (chrome.runtime.lastError) {
+                                                                var errorMsg = chrome.runtime.lastError.message;
+                                                                console.log(errorMsg)
+                                                            }
+                                                        })
+                                                    }
+                                                })
+                                                if (idx + 1 < arr.length) {
+                                                    idx++
+                                                    google_parse(arr, idx, db)
+                                                }
+                                            }, 8000)
+                                        }
+                                    })
                                 }
                             })
                         }
                     })
-                    if (idx + 1 < arr.length) {
-                        idx++
-                        google_parse(arr, idx, db)
-                    }
-                    // })
                 });
             } else {
                 console.log(r.msg)
             }
         })
-    }, 15000)
+    }, 10000)
 }
 
 function yt_parse(arr, idx, db) {

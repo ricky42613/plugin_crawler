@@ -64,7 +64,9 @@
     }
     console.log('already insert')
     $(document).ready(function() {
-        var db = window.location.hash.substring(1);
+        window.scrollTo(0, document.body.scrollHeight);
+        window.scrollTo(document.body.scrollHeight, 0);
+        var db = localStorage["auto_db"]
         let rst = $(".g .r > a").map((idx, item) => {
             try {
                 let data = {}
