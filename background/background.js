@@ -49,29 +49,29 @@ function google_parse(arr, idx, db) {
                     url: "https://www.google.com#" + arr[idx].replace(/\s/g, "+")
                 }, rsp => {
                     chrome.tabs.executeScript(rsp.id, {
-                        code: "localStorage.setItem('auto_db','" + db + "');"
+                        file: "jquery-3.3.1.min.js"
                     }, function() {
                         if (chrome.runtime.lastError) {
                             var errorMsg = chrome.runtime.lastError.message;
                             console.log(errorMsg)
                         } else {
                             chrome.tabs.executeScript(rsp.id, {
-                                file: "jquery-3.3.1.min.js"
+                                file: "home_page.js"
                             }, function() {
                                 if (chrome.runtime.lastError) {
                                     var errorMsg = chrome.runtime.lastError.message;
                                     console.log(errorMsg)
                                 } else {
-                                    chrome.tabs.executeScript(rsp.id, {
-                                        file: "home_page.js"
-                                    }, function() {
-                                        if (chrome.runtime.lastError) {
-                                            var errorMsg = chrome.runtime.lastError.message;
-                                            console.log(errorMsg)
-                                        } else {
-                                            setTimeout(function() {
+                                    setTimeout(function() {
+                                        chrome.tabs.executeScript(rsp.id, {
+                                            file: "jquery-3.3.1.min.js"
+                                        }, function() {
+                                            if (chrome.runtime.lastError) {
+                                                var errorMsg = chrome.runtime.lastError.message;
+                                                console.log(errorMsg)
+                                            } else {
                                                 chrome.tabs.executeScript(rsp.id, {
-                                                    file: "jquery-3.3.1.min.js"
+                                                    code: "localStorage.setItem('auto_db','" + db + "');"
                                                 }, function() {
                                                     if (chrome.runtime.lastError) {
                                                         var errorMsg = chrome.runtime.lastError.message;
@@ -89,13 +89,13 @@ function google_parse(arr, idx, db) {
                                                         })
                                                     }
                                                 })
-                                                if (idx + 1 < arr.length) {
-                                                    idx++
-                                                    google_parse(arr, idx, db)
-                                                }
-                                            }, 8000)
+                                            }
+                                        })
+                                        if (idx + 1 < arr.length) {
+                                            idx++
+                                            google_parse(arr, idx, db)
                                         }
-                                    })
+                                    }, 8000)
                                 }
                             })
                         }
