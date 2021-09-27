@@ -3,52 +3,52 @@
 // found in the LICENSE file.
 'use strict';
 
-function init_status(cb) {
-    $.get('http://127.0.0.1:3000/get_info', r => {
-        console.log(r)
-        cb(r)
-    })
-}
+// function init_status(cb) {
+//     $.get('http://127.0.0.1:3000/get_info', r => {
+//         console.log(r)
+//         cb(r)
+//     })
+// }
 
 let author = ""
 let timecnt
-init_status(r => {
-    if (r.status == false) {
-        chrome.browserAction.setPopup({
-            "popup": "./popup/login.html"
-        }, function() {
-            window.location.href = "login.html";
-        })
-    } else {
-        author = r.config.acn
-        timecnt = r.config.time_query
-    }
-})
+// init_status(r => {
+//     if (r.status == false) {
+//         chrome.browserAction.setPopup({
+//             "popup": "./popup/login.html"
+//         }, function() {
+//             window.location.href = "login.html";
+//         })
+//     } else {
+//         author = r.config.acn
+//         timecnt = r.config.time_query
+//     }
+// })
 
-$('#fblink').click(function(e) {
+$('#fblink').click(function (e) {
     e.preventDefault()
     chrome.browserAction.setPopup({
         "popup": "./popup/fbpage.html"
-    }, function() {
+    }, function () {
         window.location.href = "fbpage.html";
     })
 })
 
-$('#wq').click(function(e) {
+$('#wq').click(function (e) {
     e.preventDefault()
     chrome.browserAction.setPopup({
         "popup": "./popup/wqueue.html"
-    }, function() {
+    }, function () {
         window.location.href = "wqueue.html";
     })
 })
 
-$('#setting').click(function() {
+$('#setting').click(function () {
     chrome.tabs.create({
         url: "chrome-extension://" + chrome.runtime.id + "/option/options.html"
     })
 })
-$('#google').click(function() { //新增標籤
+$('#google').click(function () { //新增標籤
     let keyword = $("input[name=key_word]").val()
     let db = $('#dblist :selected').val()
     let target = []
@@ -58,7 +58,7 @@ $('#google').click(function() { //新增標籤
         if (resultFile) {
             var reader = new FileReader();
             reader.readAsText(resultFile, 'UTF-8');
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 var urlData = this.result;
                 let arr = urlData.split("\n").map((elem, idx) => {
                     if (elem[elem.length - 1] == '\n') {
@@ -69,16 +69,16 @@ $('#google').click(function() { //新增標籤
                 })
                 arr.push(keyword)
                 console.log(arr)
-                if(arr.length<=timecnt){
+                if (arr.length <= timecnt) {
                     chrome.runtime.sendMessage({
                         type: 'google_parse',
                         word: arr,
                         db: db
-                    }, function(response) {
+                    }, function (response) {
                         console.log(response)
                     });
-                }else{
-                    alert('超過最大限制('+arr.length+'/'+timecnt+')')
+                } else {
+                    alert('超過最大限制(' + arr.length + '/' + timecnt + ')')
                 }
             };
         }
@@ -88,12 +88,12 @@ $('#google').click(function() { //新增標籤
             type: 'google_parse',
             word: target,
             db: db
-        }, function(response) {
+        }, function (response) {
             console.log(response)
         });
     }
 });
-$('#youtube').click(function() { //新增標籤
+$('#youtube').click(function () { //新增標籤
     let keyword = $("input[name=key_word]").val()
     let db = $('#dblist :selected').val()
     let target = []
@@ -103,7 +103,7 @@ $('#youtube').click(function() { //新增標籤
         if (resultFile) {
             var reader = new FileReader();
             reader.readAsText(resultFile, 'UTF-8');
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 var urlData = this.result;
                 let arr = urlData.split("\n").map((elem, idx) => {
                     if (elem[elem.length - 1] == '\n') {
@@ -118,7 +118,7 @@ $('#youtube').click(function() { //新增標籤
                     type: 'yt_parse',
                     word: arr,
                     db: db
-                }, function(response) {
+                }, function (response) {
                     console.log(response)
                 });
             };
@@ -129,22 +129,22 @@ $('#youtube').click(function() { //新增標籤
             type: 'yt_parse',
             word: target,
             db: db
-        }, function(response) {
+        }, function (response) {
             console.log(response)
         });
     }
 });
-$('#logout').on('click', function() {
-    $.get("http://127.0.0.1:3000/logout", r => {
-        if (r.status) {
-            localStorage.clear()
-            chrome.browserAction.setPopup({
-                "popup": "./popup/login.html"
-            }, function() {
-                window.location.href = "login.html";
-            })
-        } else {
-            alert(r.msg)
-        }
-    })
-});
+// $('#logout').on('click', function() {
+//     $.get("http://127.0.0.1:3000/logout", r => {
+//         if (r.status) {
+//             localStorage.clear()
+//             chrome.browserAction.setPopup({
+//                 "popup": "./popup/login.html"
+//             }, function() {
+//                 window.location.href = "login.html";
+//             })
+//         } else {
+//             alert(r.msg)
+//         }
+//     })
+// });

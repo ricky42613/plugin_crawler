@@ -5,32 +5,35 @@
 'use strict';
 
 let author = ""
-    // = localStorage.getItem("author") == null ? "" : localStorage.getItem("author")
+// = localStorage.getItem("author") == null ? "" : localStorage.getItem("author")
 let dblist = ["edu_link", "key_link", "yt_104", "test", "travel_link", "yt_104_2"]
 let db_site
-    // = localStorage.getItem("site") == null ? "http://nubot70.taiwin.tw:5802" : localStorage.getItem("site")
+// = localStorage.getItem("site") == null ? "http://nubot70.taiwin.tw:5802" : localStorage.getItem("site")
 let daycnt
-    // = localStorage.getItem("daycnt") == null ? 100 :parseInt(localStorage.getItem("daycnt"))
+// = localStorage.getItem("daycnt") == null ? 100 :parseInt(localStorage.getItem("daycnt"))
 let timecnt
-    // = localStorage.getItem("timecnt") ==null ? 100 : parseInt(localStorage.getItem("timecnt"))
+// = localStorage.getItem("timecnt") ==null ? 100 : parseInt(localStorage.getItem("timecnt"))
 let auto_tab = []
 
-function init_status(cb) {
-    $.get('http://127.0.0.1:3000/get_info', r => {
-        console.log(r)
-        cb(r)
-    })
-}
+// function init_status(cb) {
+//     $.get('http://127.0.0.1:3000/get_info', r => {
+//         console.log(r)
+//         cb(r)
+//     })
+// }
+
+// var port = chrome.runtime.connectNative('3000');
+
+// port.onMessage.addListener((message) => {
+//     console.log("Received: " + message);
+// });
 
 function send_to_edu(data, db) {
-    if (author.length && data.length) {
+    if (data.length) {
         let rec = {
-            record: JSON.stringify(data.map(item => {
-                item.author = author
-                return item
-            }))
+            record: JSON.stringify(data)
         };
-        $.post(db_site + '/nudb/rput?db=' + db + '&format=json', rec, r => {
+        $.post('http://nubot63.taiwin.tw:5803/nudb/rput?db=' + db + '&format=json', rec, r => {
             console.log(r)
         })
     }
@@ -42,7 +45,7 @@ function getRandom(min, max) {
 
 function google_parse(arr, idx, db) {
     let random_num = getRandom(10, 21)
-    setTimeout(function() {
+    setTimeout(function () {
         $.get('http://127.0.0.1:3000/addcnt', r => {
             if (r.status) {
                 chrome.tabs.create({
@@ -50,36 +53,36 @@ function google_parse(arr, idx, db) {
                 }, rsp => {
                     chrome.tabs.executeScript(rsp.id, {
                         file: "jquery-3.3.1.min.js"
-                    }, function() {
+                    }, function () {
                         if (chrome.runtime.lastError) {
                             var errorMsg = chrome.runtime.lastError.message;
                             console.log(errorMsg)
                         } else {
                             chrome.tabs.executeScript(rsp.id, {
                                 file: "home_page.js"
-                            }, function() {
+                            }, function () {
                                 if (chrome.runtime.lastError) {
                                     var errorMsg = chrome.runtime.lastError.message;
                                     console.log(errorMsg)
                                 } else {
-                                    setTimeout(function() {
+                                    setTimeout(function () {
                                         chrome.tabs.executeScript(rsp.id, {
                                             file: "jquery-3.3.1.min.js"
-                                        }, function() {
+                                        }, function () {
                                             if (chrome.runtime.lastError) {
                                                 var errorMsg = chrome.runtime.lastError.message;
                                                 console.log(errorMsg)
                                             } else {
                                                 chrome.tabs.executeScript(rsp.id, {
                                                     code: "localStorage.setItem('auto_db','" + db + "');"
-                                                }, function() {
+                                                }, function () {
                                                     if (chrome.runtime.lastError) {
                                                         var errorMsg = chrome.runtime.lastError.message;
                                                         console.log(errorMsg)
                                                     } else {
                                                         chrome.tabs.executeScript(rsp.id, {
                                                             file: "google_auto.js"
-                                                        }, function() {
+                                                        }, function () {
                                                             console.log(idx)
                                                             console.log(arr.length)
                                                             if (chrome.runtime.lastError) {
@@ -109,27 +112,27 @@ function google_parse(arr, idx, db) {
 }
 
 function yt_parse(arr, idx, db) {
-    setTimeout(function() {
+    setTimeout(function () {
         chrome.tabs.create({
             url: "https://www.youtube.com/results?search_query=" + arr[idx].replace(/\s/g, "+") + "#" + db
         }, rsp => {
             chrome.tabs.executeScript(rsp.id, {
                 file: "jquery-3.3.1.min.js"
-            }, function() {
+            }, function () {
                 if (chrome.runtime.lastError) {
                     var errorMsg = chrome.runtime.lastError.message;
                     console.log(errorMsg)
                 } else {
                     chrome.tabs.executeScript(rsp.id, {
                         file: "jquery-ui.js"
-                    }, function() {
+                    }, function () {
                         if (chrome.runtime.lastError) {
                             var errorMsg = chrome.runtime.lastError.message;
                             console.log(errorMsg)
                         } else {
                             chrome.tabs.executeScript(rsp.id, {
                                 file: "youtube_auto.js"
-                            }, function() {
+                            }, function () {
                                 console.log(idx)
                                 console.log(arr.length)
                                 if (chrome.runtime.lastError) {
@@ -146,7 +149,7 @@ function yt_parse(arr, idx, db) {
                 yt_parse(arr, idx, db)
             }
         })
-    }, 20000)
+    }, 30000)
 }
 
 function onClickHandler(info, tab) {
@@ -155,10 +158,10 @@ function onClickHandler(info, tab) {
         chrome.tabs.query({
             active: true,
             currentWindow: true
-        }, function(tabs) {
+        }, function (tabs) {
             chrome.tabs.sendMessage(tabs[0].id, {
                 type: 'get_url_list'
-            }, function(response) {
+            }, function (response) {
                 send_to_edu(response, info.menuItemId)
             })
         })
@@ -166,7 +169,7 @@ function onClickHandler(info, tab) {
         chrome.tabs.query({
             active: true,
             currentWindow: true
-        }, function(tabs) {
+        }, function (tabs) {
             chrome.tabs.sendMessage(tabs[0].id, {
                 type: 'click_all'
             })
@@ -175,7 +178,7 @@ function onClickHandler(info, tab) {
         chrome.tabs.query({
             active: true,
             currentWindow: true
-        }, function(tabs) {
+        }, function (tabs) {
             chrome.tabs.sendMessage(tabs[0].id, {
                 type: 'cancel_all'
             })
@@ -183,31 +186,31 @@ function onClickHandler(info, tab) {
     }
 }
 
-init_status(rsp => {
-    if (rsp.status) {
-        chrome.browserAction.setPopup({ //設定popup頁面
-                "popup": "./popup/popup.html"
-            }, function() {
-                author = rsp.config.acn
-                db_site = rsp.config.machine
-                    // localStorage.setItem("site",author)
-                daycnt = rsp.config.day_query
-                    // localStorage.setItem("daycnt",daycnt)
-                timecnt = rsp.config.time_query
-            })
-            // localStorage.setItem("timecnt",timecnt)
-    } else {
-        chrome.browserAction.setPopup({ //設定popup頁面
-            "popup": "./popup/login.html"
-        })
-        console.log(rsp.msg)
-    }
-})
+// init_status(rsp => {
+//     if (rsp.status) {
+//         chrome.browserAction.setPopup({ //設定popup頁面
+//             "popup": "./popup/popup.html"
+//         }, function () {
+//             author = rsp.config.acn
+//             db_site = rsp.config.machine
+//             // localStorage.setItem("site",author)
+//             daycnt = rsp.config.day_query
+//             // localStorage.setItem("daycnt",daycnt)
+//             timecnt = rsp.config.time_query
+//         })
+//         // localStorage.setItem("timecnt",timecnt)
+//     } else {
+//         chrome.browserAction.setPopup({ //設定popup頁面
+//             "popup": "./popup/login.html"
+//         })
+//         console.log(rsp.msg)
+//     }
+// })
 
 chrome.contextMenus.onClicked.addListener(onClickHandler);
 
 
-chrome.runtime.onInstalled.addListener(function(details) {
+chrome.runtime.onInstalled.addListener(function (details) {
     chrome.contextMenus.create({
         title: "加入link DB",
         id: "join_db",
@@ -237,16 +240,16 @@ chrome.runtime.onInstalled.addListener(function(details) {
 })
 
 chrome.webRequest.onBeforeRequest.addListener(
-    function(details) {
+    function (details) {
         return { cancel: details.type == "image" && details.initiator == "chrome-extension://bhilfdpankmepagekoapnggoiokoeeai" };
     }, {
-        urls: ["<all_urls>"]
-    }, ["blocking"]
+    urls: ["<all_urls>"]
+}, ["blocking"]
 );
 
 
 chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
+    function (request, sender, sendResponse) {
         if (request.type == "google_parse") {
             sendResponse('ok')
             google_parse(request.word, 0, request.db)
@@ -261,32 +264,32 @@ chrome.runtime.onMessage.addListener(
             yt_parse(request.word, 0, request.db)
         } else if (request.type == "user_info") {
             author = request.info.acn
-                // localStorage.setItem("author", author)
-                // init_status(rsp => {
-                //     if (rsp.status) {
+            // localStorage.setItem("author", author)
+            // init_status(rsp => {
+            //     if (rsp.status) {
             db_site = request.info.machine
-                // localStorage.setItem("site",author)
+            // localStorage.setItem("site",author)
             daycnt = request.info.day_query
-                // localStorage.setItem("daycnt",daycnt)
+            // localStorage.setItem("daycnt",daycnt)
             timecnt = request.info.time_query
             sendResponse("ok")
-                // localStorage.setItem("timecnt",timecnt)
-                // } else {
-                //     sendResponse("fail," + r.msg)
-                //     console.log(r.msg)
-                // }
-                // })
+            // localStorage.setItem("timecnt",timecnt)
+            // } else {
+            //     sendResponse("fail," + r.msg)
+            //     console.log(r.msg)
+            // }
+            // })
         } else if (request.type == "update") {
             author = request.info.acn
             db_site = request.info.machine
-                // localStorage.setItem("site",author)
+            // localStorage.setItem("site",author)
             daycnt = request.info.day_query
-                // localStorage.setItem("daycnt",daycnt)
+            // localStorage.setItem("daycnt",daycnt)
             timecnt = request.info.time_query
             sendResponse("ok")
         } else if (request.type == "close_tab") {
             sendResponse("got it")
-            setTimeout(function() {
+            setTimeout(function () {
                 chrome.tabs.remove(sender.tab.id)
             }, 10000)
         }
@@ -294,24 +297,24 @@ chrome.runtime.onMessage.addListener(
     }
 )
 
-chrome.tabs.onUpdated.addListener(function(tabID, info) {
+chrome.tabs.onUpdated.addListener(function (tabID, info) {
     if (info.status == 'complete' && author.length) {
         chrome.tabs.query({
             active: true,
             currentWindow: true
-        }, function(tabs) {
+        }, function (tabs) {
             if (tabs.length) {
                 if (tabs[0].url.indexOf("www.google.com/search") != -1) {
                     chrome.tabs.executeScript(tabs[0].id, {
                         file: "jquery-3.3.1.min.js"
-                    }, function() {
+                    }, function () {
                         if (chrome.runtime.lastError) {
                             var errorMsg = chrome.runtime.lastError.message;
                             console.log(errorMsg)
                         } else {
                             chrome.tabs.executeScript(tabs[0].id, {
                                 file: 'google_srh.js'
-                            }, function() {
+                            }, function () {
                                 if (chrome.runtime.lastError) {
                                     var errorMsg = chrome.runtime.lastError.message;
                                     console.log(errorMsg)
@@ -322,14 +325,14 @@ chrome.tabs.onUpdated.addListener(function(tabID, info) {
                 } else if (tabs[0].url.indexOf("www.youtube.com") != -1) {
                     chrome.tabs.executeScript(tabs[0].id, {
                         file: "jquery-3.3.1.min.js"
-                    }, function() {
+                    }, function () {
                         if (chrome.runtime.lastError) {
                             var errorMsg = chrome.runtime.lastError.message;
                             console.log(errorMsg)
                         } else {
                             chrome.tabs.executeScript(tabs[0].id, {
                                 file: 'youtube_src.js'
-                            }, function() {
+                            }, function () {
                                 if (chrome.runtime.lastError) {
                                     var errorMsg = chrome.runtime.lastError.message;
                                     console.log(errorMsg)
